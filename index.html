@@ -26,7 +26,7 @@
     color: var(--text);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
-    overflow-x: auto; /* Safari fix: hidden clips flex children; auto lets bracket scroll */
+    overflow-x: auto;
   }
 
   /* ── NAME ENTRY SCREEN ── */
@@ -64,9 +64,7 @@
     width: 100%;
     max-width: 380px;
   }
-  @media (max-width: 480px) {
-    .name-card { padding: 24px 20px; }
-  }
+  @media (max-width: 480px) { .name-card { padding: 24px 20px; } }
   .name-card label {
     display: block;
     font-size: 0.65rem;
@@ -147,12 +145,7 @@
     margin-top: 6px;
     flex-wrap: wrap;
   }
-  .header-sub span {
-    color: var(--muted);
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
+  .header-sub span { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; }
   .player-badge {
     background: rgba(201,168,76,0.1);
     border: 1px solid rgba(201,168,76,0.3);
@@ -202,7 +195,6 @@
   .btn-submit:not(:disabled) { transform: translateY(0); }
   .btn-submit:not(:disabled):hover { background: var(--gold-light); }
   .btn-submit.loading { opacity: 0.6; cursor: wait; }
-
   .instruction {
     text-align: center;
     color: var(--muted);
@@ -213,7 +205,7 @@
   }
 
   /* ══════════════════════════════════════
-     DESKTOP BRACKET (≥ 900px)
+     DESKTOP BRACKET
   ══════════════════════════════════════ */
   .bracket-wrapper {
     display: flex;
@@ -229,7 +221,6 @@
     justify-content: flex-start;
     min-width: 1100px;
   }
-
   .round-label {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 0.75rem;
@@ -275,14 +266,7 @@
   .team.loser { opacity: 0.35; }
   .flag { font-size: 0.95rem; line-height: 1; flex-shrink: 0; }
   .team-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-  .final-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-    text-align: center;
-  }
+  .final-label { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.2em; color: var(--gold); text-align: center; }
   .center-col {
     display: flex;
     flex-direction: column;
@@ -323,24 +307,18 @@
     transition: all 0.2s;
   }
   .reset-btn:hover { border-color: rgba(201,168,76,0.4); color: var(--gold); }
-
-  /* ── LOCKED ROUND STYLES ── */
   .match-locked { opacity: 0.45; border-color: var(--line) !important; box-shadow: none !important; }
   .match-locked:hover { border-color: var(--line) !important; }
   .team-locked { cursor: not-allowed !important; }
   .team-locked:hover { background: transparent !important; }
-  /* Lock icon on the round label when locked */
   .round-label.locked::before { content: '🔒 '; font-size: 0.65rem; }
   .mobile-round-header.locked::before { content: '🔒 '; font-size: 0.75rem; }
 
   /* ══════════════════════════════════════
-     MOBILE BRACKET (< 900px)
+     MOBILE BRACKET
   ══════════════════════════════════════ */
   #mobile-bracket { display: none; }
-
-  .mobile-round {
-    padding: 0 12px 20px;
-  }
+  .mobile-round { padding: 0 12px 20px; }
   .mobile-round-header {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 0.9rem;
@@ -361,22 +339,9 @@
     background: var(--gold);
     opacity: 0.5;
   }
-  .mobile-matches-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .mobile-matches-grid.one-col {
-    grid-template-columns: 1fr;
-    max-width: 260px;
-    margin: 0 auto;
-  }
-  .mobile-match {
-    border: 1px solid var(--line);
-    border-radius: 5px;
-    overflow: hidden;
-    background: var(--panel);
-  }
+  .mobile-matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mobile-matches-grid.one-col { grid-template-columns: 1fr; max-width: 260px; margin: 0 auto; }
+  .mobile-match { border: 1px solid var(--line); border-radius: 5px; overflow: hidden; background: var(--panel); }
   .mobile-match:hover { border-color: rgba(201,168,76,0.3); }
   .mobile-team {
     display: flex;
@@ -397,29 +362,12 @@
   .mobile-team.winner { background: var(--winner-bg); color: var(--gold-light); font-weight: 700; }
   .mobile-team.winner::after { content: '✓'; position: absolute; right: 8px; font-size: 0.6rem; color: var(--gold); }
   .mobile-team.loser { opacity: 0.35; }
-
-  /* Mobile final */
-  .mobile-final-section {
-    padding: 0 12px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-  }
-  .mobile-final-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-    text-align: center;
-    padding: 10px 0 0;
-  }
+  .mobile-final-section { padding: 0 12px 20px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .mobile-final-label { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.2em; color: var(--gold); text-align: center; padding: 10px 0 0; }
   .mobile-final-match {
-    width: 100%;
-    max-width: 260px;
+    width: 100%; max-width: 260px;
     border: 1px solid rgba(201,168,76,0.4);
-    border-radius: 5px;
-    overflow: hidden;
+    border-radius: 5px; overflow: hidden;
     background: var(--panel);
     box-shadow: 0 0 16px rgba(201,168,76,0.07);
   }
@@ -430,8 +378,7 @@
     border: 1px solid rgba(201,168,76,0.3);
     border-radius: 4px;
     background: rgba(201,168,76,0.05);
-    width: 100%;
-    max-width: 260px;
+    width: 100%; max-width: 260px;
   }
   .mobile-reset-btn {
     padding: 8px 20px;
@@ -448,8 +395,6 @@
     margin-bottom: 30px;
   }
   .mobile-reset-btn:hover { border-color: rgba(201,168,76,0.4); color: var(--gold); }
-
-  /* section divider */
   .mobile-side-label {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 0.72rem;
@@ -460,27 +405,16 @@
     padding: 4px 0 8px;
   }
 
-  /* DESKTOP only */
   @media (max-width: 899px) {
     #desktop-bracket { display: none !important; }
     #mobile-bracket { display: block !important; }
-    /* Hide sticky bar on mobile — submit button lives inline below champion */
     #submit-bar { display: none !important; }
   }
   @media (min-width: 900px) {
     #desktop-bracket { display: block; }
     #mobile-bracket { display: none; }
-  }
-
-  /* ── SAFARI SCROLL FIX ──
-     Safari clips flex children when the scroll container uses
-     justify-content:center and content is wider than the viewport.
-     Solution: switch to flex-start and use auto padding so content
-     appears centred on wide screens but is fully scrollable on narrow ones. */
-  @media (min-width: 900px) {
     .bracket-wrapper {
       justify-content: flex-start !important;
-      /* Centre when viewport is wide enough, scroll when not */
       padding-left: max(20px, calc((100vw - 1140px) / 2)) !important;
       padding-right: max(20px, calc((100vw - 1140px) / 2)) !important;
     }
@@ -488,49 +422,175 @@
 
   .pitch-deco {
     position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: 4px;
+    bottom: 0; left: 0; right: 0; height: 4px;
     background: linear-gradient(90deg, transparent, var(--pitch), var(--gold), var(--pitch), transparent);
-    opacity: 0.6;
-    pointer-events: none;
+    opacity: 0.6; pointer-events: none;
   }
 
-  /* ── SUCCESS SCREEN ── */
-  #success-screen {
+  /* ════════════════════════════════════════════
+     RESULTS SCREEN (screenshot-ready)
+  ════════════════════════════════════════════ */
+  #results-screen {
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    background: var(--bg);
     min-height: 100vh;
-    padding: 40px 20px;
-    text-align: center;
-    background: radial-gradient(ellipse at 50% 30%, #0D2A18 0%, var(--bg) 70%);
   }
-  #success-screen .big-trophy { font-size: 5rem; margin-bottom: 24px; display: block; animation: pulse 2s ease-in-out infinite; }
-  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-  #success-screen h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2rem, 7vw, 2.8rem);
-    color: var(--gold);
-    letter-spacing: 0.1em;
-    margin-bottom: 10px;
-  }
-  #success-screen p { color: var(--muted); font-size: 0.85rem; line-height: 1.7; max-width: 340px; }
-  #success-screen .summary-card {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 20px 28px;
-    margin: 24px 0;
-    max-width: 340px;
+
+  /* The framed card that gets screenshotted */
+  #results-card {
     width: 100%;
-    text-align: left;
+    max-width: 1200px;
+    background: var(--bg);
+    margin: 0 auto;
   }
-  .summary-card .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 0.78rem; gap: 12px; }
-  .summary-card .sum-row:last-child { border-bottom: none; }
-  .sum-label { color: var(--muted); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; white-space: nowrap; }
-  .sum-val { font-weight: 600; color: var(--text); text-align: right; }
-  .sum-val.gold { color: var(--gold-light); }
+
+  .results-header {
+    background: linear-gradient(180deg, #0B2016 0%, #0A0F0D 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 20px 28px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .results-header-left { display: flex; flex-direction: column; gap: 4px; }
+  .results-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .results-player-name {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .results-player-name strong { color: var(--text); font-weight: 600; }
+  .results-champion-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 6px;
+    padding: 10px 20px;
+    text-align: center;
+  }
+  .results-champion-badge .badge-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .results-champion-badge .badge-flag { font-size: 1.8rem; line-height: 1.2; }
+  .results-champion-badge .badge-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.12em;
+    color: var(--gold-light);
+  }
+
+  /* Desktop results bracket — same layout as picker but read-only & compact */
+  #results-desktop-bracket {
+    display: none;
+    padding: 18px 16px 28px;
+    overflow-x: auto;
+  }
+  #results-desktop-bracket .bracket-wrapper {
+    padding: 0 !important;
+    overflow: visible;
+  }
+  #results-desktop-bracket .bracket-inner { min-width: 900px; }
+  /* Smaller match cards in results view */
+  #results-desktop-bracket .match { width: 130px; }
+  #results-desktop-bracket .team {
+    min-height: 30px; font-size: 0.65rem; padding: 5px 7px;
+    cursor: default; pointer-events: none;
+  }
+  #results-desktop-bracket .team:hover { background: transparent; }
+  #results-desktop-bracket .team.winner { background: var(--winner-bg); color: var(--gold-light); font-weight: 700; }
+  #results-desktop-bracket .team.loser { opacity: 0.3; }
+  #results-desktop-bracket .match.final-match { width: 152px; }
+  #results-desktop-bracket .match.final-match .team { min-height: 36px; font-size: 0.72rem; cursor: default; pointer-events: none; }
+  #results-desktop-bracket .center-col { min-width: 152px; padding: 0 16px; }
+  #results-desktop-bracket .round-label { font-size: 0.65rem; padding: 2px 6px; }
+
+  /* Mobile results — vertical flow */
+  #results-mobile-bracket {
+    display: none;
+    width: 100%;
+    padding: 0 0 20px;
+  }
+  /* Reuse mobile match styles but pointer-events: none */
+  #results-mobile-bracket .mobile-team { cursor: default; pointer-events: none; }
+  #results-mobile-bracket .mobile-team:hover { background: transparent; }
+  #results-mobile-bracket .mobile-team.winner { background: var(--winner-bg); color: var(--gold-light); }
+
+  /* Screenshot action bar — NOT included in screenshot area */
+  .results-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 16px 40px;
+    border-top: 1px solid var(--line);
+  }
+  .results-actions p {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-align: center;
+    line-height: 1.7;
+  }
+  .btn-new-pick {
+    padding: 10px 28px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+  }
+  .btn-new-pick:hover { border-color: rgba(201,168,76,0.4); color: var(--gold); }
+
+  /* Screenshot watermark line */
+  .results-footer {
+    text-align: center;
+    padding: 10px 16px 14px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  .results-footer span {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+  .results-footer .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--muted); opacity: 0.4; }
+
+  @media (min-width: 900px) {
+    #results-desktop-bracket { display: block; }
+    #results-mobile-bracket { display: none; }
+    #results-card { border: 1px solid rgba(201,168,76,0.2); margin: 24px auto; }
+  }
+  @media (max-width: 899px) {
+    #results-desktop-bracket { display: none; }
+    #results-mobile-bracket { display: block; }
+  }
 
   /* TOAST */
   #toast {
@@ -578,48 +638,67 @@
       <span class="player-badge" id="player-display">—</span>
     </div>
   </div>
-
   <div id="submit-bar">
     <span class="progress-text" id="progress-text">Pick all winners to submit</span>
     <button class="btn-submit" id="submit-btn" disabled onclick="submitPrediction()">
       Submit My Prediction
     </button>
   </div>
-
   <div class="instruction">Tap a team to advance them through the bracket</div>
-
-  <!-- DESKTOP BRACKET -->
   <div id="desktop-bracket">
     <div class="bracket-wrapper">
       <div class="bracket-inner" id="bracket"></div>
     </div>
   </div>
-
-  <!-- MOBILE BRACKET -->
-  <div id="mobile-bracket" id="mobile-bracket-wrapper"></div>
-
+  <div id="mobile-bracket"></div>
   <div class="pitch-deco"></div>
 </div>
 
-<!-- STEP 3 — SUCCESS -->
-<div id="success-screen">
-  <span class="big-trophy">🏆</span>
-  <h2>Prediction Submitted!</h2>
-  <p>Your picks are locked in. Good luck — may your champion reign supreme.</p>
-  <div class="summary-card" id="summary-card"></div>
-  <p style="color:var(--muted);font-size:0.72rem;margin-top:8px;">
-    Want to change your picks? Refresh the page to start over.
-  </p>
+<!-- STEP 3 — RESULTS (screenshot-ready) -->
+<div id="results-screen">
+  <!-- Everything inside results-card is the screenshottable area -->
+  <div id="results-card">
+    <div class="results-header">
+      <div class="results-header-left">
+        <div class="results-title">⚽ World Cup Predictor — My Bracket</div>
+        <div class="results-player-name">Predicted by <strong id="results-player-name-display">—</strong></div>
+      </div>
+      <div class="results-champion-badge" id="results-champion-badge">
+        <div class="badge-label">🏆 My Champion</div>
+        <div class="badge-flag" id="results-champ-flag">—</div>
+        <div class="badge-name" id="results-champ-name">—</div>
+      </div>
+    </div>
+
+    <!-- Desktop results bracket -->
+    <div id="results-desktop-bracket">
+      <div class="bracket-wrapper">
+        <div class="bracket-inner" id="results-bracket-inner"></div>
+      </div>
+    </div>
+
+    <!-- Mobile results bracket -->
+    <div id="results-mobile-bracket" id="results-mobile-bracket-el"></div>
+
+    <div class="results-footer">
+      <span>World Cup 2030 Bracket Predictor</span>
+      <div class="dot"></div>
+      <span>Screenshot &amp; share your picks</span>
+    </div>
+  </div>
+
+  <!-- Actions BELOW the card (won't appear in screenshot) -->
+  <div class="results-actions">
+    <p>📸 Take a screenshot of your bracket above to share with friends!<br>
+    Your picks have been saved.</p>
+    <button class="btn-new-pick" onclick="location.reload()">↺ Start Over with New Picks</button>
+  </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════
-// PASTE YOUR GOOGLE APPS SCRIPT URL HERE
-// ════════════════════════════════════════════════
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz58WWSmCUM7HIEsLZUHgRQb4YavLuauBEx_lAqKNnLfB9xUPYUIKq5as-KPr8WO7xTwA/exec";
-// ════════════════════════════════════════════════
 
 const teamsData = {
   left: [
@@ -644,12 +723,8 @@ const teamsData = {
   ]
 };
 
-// Round keys and display labels
 const ROUNDS = ['R32','R16','QF','SF'];
 const ROUND_LABELS = { R32:'Round of 32', R16:'Round of 16', QF:'Quarter-Final', SF:'Semi-Final' };
-
-// Match counts per round per side
-// R32: 8 matches, R16: 4 matches, QF: 2 matches, SF: 1 match
 const MATCH_COUNTS = [8, 4, 2, 1];
 
 let playerName = '';
@@ -693,9 +768,8 @@ function getTeamAt(side, roundIdx, matchIdx, slot) {
   return slot === 0 ? w0 : w1;
 }
 
-// Returns true if all matches in the previous round on this side are filled
 function isRoundUnlocked(side, roundIdx) {
-  if (roundIdx === 0) return true; // R32 always open
+  if (roundIdx === 0) return true;
   const prevCount = MATCH_COUNTS[roundIdx - 1];
   for (let i = 0; i < prevCount; i++) {
     if (!state[side][roundIdx - 1][i]) return false;
@@ -703,18 +777,16 @@ function isRoundUnlocked(side, roundIdx) {
   return true;
 }
 
-// Final is unlocked only when both sides have their SF winner
 function isFinalUnlocked() {
   return !!(state['left'][3][0] && state['right'][3][0]);
 }
 
 function pickWinner(side, roundIdx, matchIdx, slot) {
-  if (!isRoundUnlocked(side, roundIdx)) return; // round locked
+  if (!isRoundUnlocked(side, roundIdx)) return;
   const team = getTeamAt(side, roundIdx, matchIdx, slot);
   if (!team) return;
   const cur = state[side][roundIdx][matchIdx];
   state[side][roundIdx][matchIdx] = (cur && cur.name === team.name) ? null : team;
-  // Invalidate downstream picks
   for (let r = roundIdx + 1; r < ROUNDS.length; r++) {
     const m = Math.floor(matchIdx / Math.pow(2, r - roundIdx));
     state[side][r][m] = null;
@@ -734,12 +806,6 @@ function pickFinalTeam(slot) {
 }
 
 // ── PROGRESS ─────────────────────────────────
-// Total decisions: 8+4+2+1 left + 8+4+2+1 right + 1 champion = 30+1 = 31
-// Wait — we only track: SF winner of left (1) + SF winner of right (1) + champion (1)
-// Actually all picks: 8+4+2+1=15 per side = 30 total + champion = 31
-// But per the original: TOTAL_PICKS = 16 (counting combined, not per-side doubling)
-// The original counted 15 picks (all rounds both sides combined: 8+4+2+1=15 total per bracket, not per side)
-// Let's recount: left R32=8, R16=4, QF=2, SF=1 = 15; right same = 15; champion=1; TOTAL=31
 function countPicks() {
   let count = 0;
   ['left','right'].forEach(side => {
@@ -752,35 +818,17 @@ function countPicks() {
   if (stateChampion) count++;
   return count;
 }
-
-const TOTAL_PICKS = 31; // 15 left + 15 right + 1 champion
-
-function allBracketPicksDone() {
-  // All 30 match picks done (not counting champion)
-  let count = 0;
-  ['left','right'].forEach(side => {
-    ROUNDS.forEach((_, ri) => {
-      for (let i = 0; i < MATCH_COUNTS[ri]; i++) {
-        if (state[side][ri][i]) count++;
-      }
-    });
-  });
-  return count === 30;
-}
+const TOTAL_PICKS = 31;
 
 function updateProgress() {
   const picks    = countPicks();
   const submitBtn = document.getElementById('submit-btn');
   const progText  = document.getElementById('progress-text');
-  const remaining = TOTAL_PICKS - picks;
-
   if (picks === TOTAL_PICKS) {
     progText.innerHTML = `✅ All <strong>${TOTAL_PICKS}</strong> picks made — ready to submit!`;
   } else {
     progText.innerHTML = `<strong>${picks}/${TOTAL_PICKS}</strong> picks made`;
   }
-
-  // Submit button ONLY appears when champion is chosen (final pick)
   submitBtn.disabled = !stateChampion;
 }
 
@@ -795,54 +843,44 @@ function render() {
 function renderDesktop() {
   const bracket = document.getElementById('bracket');
   bracket.innerHTML = '';
-
-  const leftSide = buildSideEl('left');
-  bracket.appendChild(leftSide);
-
+  bracket.appendChild(buildSideEl('left'));
   const center = document.createElement('div');
   center.className = 'center-col';
   center.appendChild(Object.assign(document.createElement('div'), { className:'final-label', textContent:'THE FINAL 🏆' }));
   center.appendChild(buildFinalMatchEl());
-
   const champBox = document.createElement('div');
   champBox.className = 'champion-box';
   champBox.innerHTML = stateChampion
     ? `<div class="champ-label">🏆 World Champion</div><span class="champ-flag">${stateChampion.flag}</span><div class="champ-name">${stateChampion.name}</div>`
     : `<div class="champ-label">World Champion</div><div class="champ-name" style="color:var(--muted);font-size:0.9rem">—</div>`;
   center.appendChild(champBox);
-
   const resetBtn = document.createElement('button');
   resetBtn.className = 'reset-btn';
   resetBtn.textContent = '↺ Reset Bracket';
   resetBtn.onclick = () => { initState(); render(); };
   center.appendChild(resetBtn);
-
   bracket.appendChild(center);
   bracket.appendChild(buildSideEl('right'));
 }
 
-function buildSideEl(side) {
+function buildSideEl(side, readOnly=false) {
   const sideEl = document.createElement('div');
   sideEl.style.cssText = `display:flex;flex-direction:${side==='right'?'row-reverse':'row'};align-items:stretch;`;
-
   ROUNDS.forEach((round, roundIdx) => {
     const matchCount = MATCH_COUNTS[roundIdx];
     const gap = roundIdx === 0 ? 6 : 0;
     const col = document.createElement('div');
     col.style.cssText = 'display:flex;flex-direction:column;align-items:center;';
-
     const lbl = document.createElement('div');
-    const roundLocked = roundIdx > 0 && !isRoundUnlocked(side, roundIdx);
+    const roundLocked = !readOnly && roundIdx > 0 && !isRoundUnlocked(side, roundIdx);
     lbl.className = 'round-label' + (roundLocked ? ' locked' : '');
     lbl.textContent = ROUND_LABELS[round];
     col.appendChild(lbl);
-
     const wrap = document.createElement('div');
     wrap.style.cssText = `display:flex;flex-direction:column;flex:1;justify-content:space-around;gap:${gap}px;`;
-    for (let mi = 0; mi < matchCount; mi++) wrap.appendChild(buildMatchEl(side, roundIdx, mi));
+    for (let mi = 0; mi < matchCount; mi++) wrap.appendChild(buildMatchEl(side, roundIdx, mi, readOnly));
     col.appendChild(wrap);
     sideEl.appendChild(col);
-
     if (roundIdx < ROUNDS.length - 1) {
       const connWrap = document.createElement('div');
       connWrap.style.cssText = 'display:flex;flex-direction:column;justify-content:space-around;padding-top:36px;';
@@ -853,9 +891,9 @@ function buildSideEl(side) {
   return sideEl;
 }
 
-function buildMatchEl(side, roundIdx, matchIdx) {
+function buildMatchEl(side, roundIdx, matchIdx, readOnly=false) {
   const div = document.createElement('div');
-  const locked = !isRoundUnlocked(side, roundIdx);
+  const locked = !readOnly && !isRoundUnlocked(side, roundIdx);
   div.className = 'match' + (locked ? ' match-locked' : '');
   for (let slot = 0; slot < 2; slot++) {
     const team   = getTeamAt(side, roundIdx, matchIdx, slot);
@@ -863,9 +901,9 @@ function buildMatchEl(side, roundIdx, matchIdx) {
     const td = document.createElement('div');
     td.className = 'team' + (locked ? ' team-locked' : '');
     if (team) {
-      if (!locked && winner) td.classList.add(winner.name === team.name ? 'winner' : 'loser');
+      if (winner) td.classList.add(winner.name === team.name ? 'winner' : 'loser');
       td.innerHTML = `<span class="flag">${team.flag}</span><span class="team-name">${team.name}</span>`;
-      if (!locked) td.addEventListener('click', () => pickWinner(side, roundIdx, matchIdx, slot));
+      if (!readOnly && !locked) td.addEventListener('click', () => pickWinner(side, roundIdx, matchIdx, slot));
     } else {
       td.innerHTML = `<span class="flag" style="opacity:.3">⬡</span><span class="team-name" style="color:var(--muted);font-style:italic;font-size:0.62rem">TBD</span>`;
     }
@@ -874,17 +912,17 @@ function buildMatchEl(side, roundIdx, matchIdx) {
   return div;
 }
 
-function buildFinalMatchEl() {
+function buildFinalMatchEl(readOnly=false) {
   const div = document.createElement('div');
   const locked = !isFinalUnlocked();
-  div.className = 'match final-match' + (locked ? ' match-locked' : '');
+  div.className = 'match final-match' + (!readOnly && locked ? ' match-locked' : '');
   [state['left'][3][0], state['right'][3][0]].forEach((team, slot) => {
     const td = document.createElement('div');
-    td.className = 'team' + (locked ? ' team-locked' : '');
+    td.className = 'team' + (!readOnly && locked ? ' team-locked' : '');
     if (team) {
-      if (!locked && stateChampion) td.classList.add(stateChampion.name === team.name ? 'winner' : 'loser');
+      if (stateChampion) td.classList.add(stateChampion.name === team.name ? 'winner' : 'loser');
       td.innerHTML = `<span class="flag">${team.flag}</span><span class="team-name">${team.name}</span>`;
-      if (!locked) td.addEventListener('click', () => pickFinalTeam(slot));
+      if (!readOnly && !locked) td.addEventListener('click', () => pickFinalTeam(slot));
     } else {
       td.innerHTML = `<span class="flag" style="opacity:.3">⬡</span><span class="team-name" style="color:var(--muted);font-style:italic;font-size:0.62rem">TBD</span>`;
     }
@@ -909,62 +947,49 @@ function buildConnUnit(side) {
 }
 
 /* ─── MOBILE RENDER ─── */
-function renderMobile() {
-  const wrapper = document.getElementById('mobile-bracket');
+function renderMobile(targetId='mobile-bracket', readOnly=false) {
+  const wrapper = document.getElementById(targetId);
   wrapper.innerHTML = '';
-
-  // Render rounds in order: R32 → R16 → QF → SF for left, then right, then final
   const roundOrder = [
     { side: 'left',  label: '🔵 Left Side' },
     { side: 'right', label: '🔴 Right Side' },
   ];
-
   roundOrder.forEach(({ side, label }) => {
     const sideDiv = document.createElement('div');
     sideDiv.style.cssText = 'padding-bottom:4px;';
-
     const sideLbl = document.createElement('div');
     sideLbl.className = 'mobile-side-label';
     sideLbl.textContent = label;
     sideDiv.appendChild(sideLbl);
-
     ROUNDS.forEach((round, roundIdx) => {
       const matchCount = MATCH_COUNTS[roundIdx];
       const roundDiv = document.createElement('div');
       roundDiv.className = 'mobile-round';
-
       const hdr = document.createElement('div');
-      const mRoundLocked = roundIdx > 0 && !isRoundUnlocked(side, roundIdx);
+      const mRoundLocked = !readOnly && roundIdx > 0 && !isRoundUnlocked(side, roundIdx);
       hdr.className = 'mobile-round-header' + (mRoundLocked ? ' locked' : '');
       hdr.textContent = ROUND_LABELS[round];
       roundDiv.appendChild(hdr);
-
       const grid = document.createElement('div');
       grid.className = 'mobile-matches-grid' + (matchCount === 1 ? ' one-col' : '');
       for (let mi = 0; mi < matchCount; mi++) {
-        grid.appendChild(buildMobileMatchEl(side, roundIdx, mi));
+        grid.appendChild(buildMobileMatchEl(side, roundIdx, mi, readOnly));
       }
       roundDiv.appendChild(grid);
       sideDiv.appendChild(roundDiv);
     });
-
     wrapper.appendChild(sideDiv);
-    // divider between sides
     const div = document.createElement('div');
     div.style.cssText = 'height:1px;background:var(--line);margin:4px 12px 16px;';
     wrapper.appendChild(div);
   });
-
   // Final + Champion
   const finalSection = document.createElement('div');
   finalSection.className = 'mobile-final-section';
-
   const finalLbl = document.createElement('div');
   finalLbl.className = 'mobile-final-label';
   finalLbl.textContent = '⚽ THE FINAL ⚽';
   finalSection.appendChild(finalLbl);
-
-  // Final match
   const finalMatch = document.createElement('div');
   finalMatch.className = 'mobile-final-match';
   [state['left'][3][0], state['right'][3][0]].forEach((team, slot) => {
@@ -973,7 +998,7 @@ function renderMobile() {
     if (team) {
       if (stateChampion) td.classList.add(stateChampion.name === team.name ? 'winner' : 'loser');
       td.innerHTML = `<span class="flag">${team.flag}</span><span class="team-name">${team.name}</span>`;
-      td.addEventListener('click', () => pickFinalTeam(slot));
+      if (!readOnly) td.addEventListener('click', () => pickFinalTeam(slot));
     } else {
       td.innerHTML = `<span class="flag" style="opacity:.3">⬡</span><span style="color:var(--muted);font-style:italic;font-size:0.68rem">TBD</span>`;
     }
@@ -981,37 +1006,33 @@ function renderMobile() {
     finalMatch.appendChild(td);
   });
   finalSection.appendChild(finalMatch);
-
-  // Champion box
   const champBox = document.createElement('div');
   champBox.className = 'mobile-champion-box';
   champBox.innerHTML = stateChampion
     ? `<div class="champ-label">🏆 World Champion</div><span class="champ-flag">${stateChampion.flag}</span><div class="champ-name">${stateChampion.name}</div>`
     : `<div class="champ-label">World Champion</div><div class="champ-name" style="color:var(--muted);font-size:0.9rem">—</div>`;
   finalSection.appendChild(champBox);
-
-  // Mobile submit button — only visible after champion is picked
-  if (stateChampion) {
-    const mobileSubmitBtn = document.createElement('button');
-    mobileSubmitBtn.className = 'btn-submit';
-    mobileSubmitBtn.style.cssText = 'width:100%;max-width:260px;padding:14px;font-size:1.1rem;margin-top:4px;';
-    mobileSubmitBtn.textContent = 'Submit My Prediction';
-    mobileSubmitBtn.onclick = submitPrediction;
-    finalSection.appendChild(mobileSubmitBtn);
+  if (!readOnly) {
+    if (stateChampion) {
+      const mobileSubmitBtn = document.createElement('button');
+      mobileSubmitBtn.className = 'btn-submit';
+      mobileSubmitBtn.style.cssText = 'width:100%;max-width:260px;padding:14px;font-size:1.1rem;margin-top:4px;';
+      mobileSubmitBtn.textContent = 'Submit My Prediction';
+      mobileSubmitBtn.onclick = submitPrediction;
+      finalSection.appendChild(mobileSubmitBtn);
+    }
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'mobile-reset-btn';
+    resetBtn.textContent = '↺ Reset Bracket';
+    resetBtn.onclick = () => { initState(); render(); };
+    finalSection.appendChild(resetBtn);
   }
-
-  const resetBtn = document.createElement('button');
-  resetBtn.className = 'mobile-reset-btn';
-  resetBtn.textContent = '↺ Reset Bracket';
-  resetBtn.onclick = () => { initState(); render(); };
-  finalSection.appendChild(resetBtn);
-
   wrapper.appendChild(finalSection);
 }
 
-function buildMobileMatchEl(side, roundIdx, matchIdx) {
+function buildMobileMatchEl(side, roundIdx, matchIdx, readOnly=false) {
   const div = document.createElement('div');
-  const locked = !isRoundUnlocked(side, roundIdx);
+  const locked = !readOnly && !isRoundUnlocked(side, roundIdx);
   div.className = 'mobile-match' + (locked ? ' match-locked' : '');
   for (let slot = 0; slot < 2; slot++) {
     const team   = getTeamAt(side, roundIdx, matchIdx, slot);
@@ -1019,9 +1040,9 @@ function buildMobileMatchEl(side, roundIdx, matchIdx) {
     const td = document.createElement('div');
     td.className = 'mobile-team' + (locked ? ' team-locked' : '');
     if (team) {
-      if (!locked && winner) td.classList.add(winner.name === team.name ? 'winner' : 'loser');
+      if (winner) td.classList.add(winner.name === team.name ? 'winner' : 'loser');
       td.innerHTML = `<span class="flag">${team.flag}</span><span class="team-name">${team.name}</span>`;
-      if (!locked) td.addEventListener('click', () => pickWinner(side, roundIdx, matchIdx, slot));
+      if (!readOnly && !locked) td.addEventListener('click', () => pickWinner(side, roundIdx, matchIdx, slot));
     } else {
       td.innerHTML = `<span class="flag" style="opacity:.3">⬡</span><span style="color:var(--muted);font-style:italic;font-size:0.62rem">TBD</span>`;
     }
@@ -1031,17 +1052,7 @@ function buildMobileMatchEl(side, roundIdx, matchIdx) {
   return div;
 }
 
-// ── COLLECT PICKS FOR SHEET ──────────────────
-// FIX: Each match gets its own column with a clear name.
-// Columns: Timestamp | Name | Champion
-//   Left_R32_M1 … Left_R32_M8
-//   Left_R16_M1 … Left_R16_M4
-//   Left_QF_M1  … Left_QF_M2
-//   Left_SF_M1
-//   Right_R32_M1 … Right_R32_M8
-//   Right_R16_M1 … Right_R16_M4
-//   Right_QF_M1  … Right_QF_M2
-//   Right_SF_M1
+// ── COLLECT PICKS ──────────────────────────────
 function collectPicks() {
   const picks = {};
   ['left','right'].forEach(side => {
@@ -1049,14 +1060,50 @@ function collectPicks() {
       const n = MATCH_COUNTS[ri];
       for (let i = 0; i < n; i++) {
         const w = state[side][ri][i];
-        // e.g. "Left_R32_M1", "Right_SF_M1"
         const key = `${side.charAt(0).toUpperCase()+side.slice(1)}_${r}_M${i+1}`;
         picks[key] = w ? w.name : '';
       }
     });
   });
-  // Note: champion is sent separately as data.champion — do NOT include it here
+  picks['Champion'] = stateChampion ? stateChampion.name : '';
   return picks;
+}
+
+// ── RESULTS SCREEN ─────────────────────────────
+function showResultsScreen() {
+  document.getElementById('bracket-screen').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'flex';
+
+  // Fill header
+  document.getElementById('results-player-name-display').textContent = playerName;
+  if (stateChampion) {
+    document.getElementById('results-champ-flag').textContent = stateChampion.flag;
+    document.getElementById('results-champ-name').textContent = stateChampion.name;
+  }
+
+  // Build desktop results bracket (read-only)
+  const inner = document.getElementById('results-bracket-inner');
+  inner.innerHTML = '';
+  inner.appendChild(buildSideEl('left', true));
+  const center = document.createElement('div');
+  center.className = 'center-col';
+  center.appendChild(Object.assign(document.createElement('div'), { className:'final-label', textContent:'THE FINAL 🏆' }));
+  center.appendChild(buildFinalMatchEl(true));
+  const champBox = document.createElement('div');
+  champBox.className = 'champion-box';
+  champBox.innerHTML = stateChampion
+    ? `<div class="champ-label">🏆 World Champion</div><span class="champ-flag">${stateChampion.flag}</span><div class="champ-name">${stateChampion.name}</div>`
+    : '';
+  center.appendChild(champBox);
+  inner.appendChild(center);
+  inner.appendChild(buildSideEl('right', true));
+
+  // Build mobile results bracket (read-only)
+  renderMobile('results-mobile-bracket', true);
+
+  // scroll to top
+  window.scrollTo(0, 0);
 }
 
 // ── SUBMIT ───────────────────────────────────
@@ -1069,8 +1116,7 @@ async function submitPrediction() {
   const leftFinalist  = state['left'][3][0];
   const rightFinalist = state['right'][3][0];
   const finalMatchup  = (leftFinalist && rightFinalist)
-    ? `${leftFinalist.name} vs ${rightFinalist.name}`
-    : '';
+    ? `${leftFinalist.name} vs ${rightFinalist.name}` : '';
 
   const payload = {
     name: playerName,
@@ -1087,29 +1133,13 @@ async function submitPrediction() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    showSuccessScreen(payload);
+    showResultsScreen();
   } catch(err) {
     showToast('Connection error — check your internet and try again.', true);
     btn.disabled = false;
     btn.classList.remove('loading');
     btn.textContent = 'Submit My Prediction';
   }
-}
-
-function showSuccessScreen(payload) {
-  document.getElementById('bracket-screen').style.display = 'none';
-  const s = document.getElementById('success-screen');
-  s.style.display = 'flex';
-
-  const leftFinal  = state['left'][3][0];
-  const rightFinal = state['right'][3][0];
-
-  document.getElementById('summary-card').innerHTML = `
-    <div class="sum-row"><span class="sum-label">Player</span><span class="sum-val gold">${playerName}</span></div>
-    <div class="sum-row"><span class="sum-label">Left Finalist</span><span class="sum-val">${leftFinal ? leftFinal.flag+' '+leftFinal.name : '—'}</span></div>
-    <div class="sum-row"><span class="sum-label">Right Finalist</span><span class="sum-val">${rightFinal ? rightFinal.flag+' '+rightFinal.name : '—'}</span></div>
-    <div class="sum-row"><span class="sum-label">🏆 Champion</span><span class="sum-val gold">${stateChampion ? stateChampion.flag+' '+stateChampion.name : '—'}</span></div>
-  `;
 }
 
 function showToast(msg, isError=false) {
