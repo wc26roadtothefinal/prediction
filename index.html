@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup Bracket Predictor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #F0C96B;
+    --green: #1A6B3A;
+    --green-dark: #0D3D22;
+    --pitch: #1E5C35;
+    --bg: #0A0F0D;
+    --panel: #101810;
+    --line: #1F2E24;
+    --text: #E8F0EA;
+    --muted: #6B8070;
+    --winner-bg: #1A3D24;
+    --hover: #162B1E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: auto;
+  }
+
+  /* ── NAME ENTRY SCREEN ── */
+  #name-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 30%, #0D2A18 0%, var(--bg) 70%);
+  }
+  #name-screen .trophy-big { font-size: 4rem; margin-bottom: 20px; display: block; }
+  #name-screen h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.2rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(201,168,76,0.35);
+  }
+  #name-screen p {
+    color: var(--muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 12px 0 40px;
+  }
+  .name-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 36px 40px;
+    width: 100%;
+    max-width: 380px;
+  }
+  .name-card label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .name-card input {
+    width: 100%;
+    background: #0D1810;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 20px;
+  }
+  .name-card input:focus { border-color: var(--gold); }
+  .name-card input::placeholder { color: var(--muted); font-weight: 400; }
+  .btn-start {
+    width: 100%;
+    padding: 14px;
+    background: var(--gold);
+    border: none;
+    border-radius: 4px;
+    color: #0A0F0D;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-start:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-start:active { transform: translateY(0); }
+  .name-error {
+    color: #e05a5a;
+    font-size: 0.72rem;
+    margin-top: -12px;
+    margin-bottom: 14px;
+    text-align: left;
+    display: none;
+  }
+
+  /* ── MAIN BRACKET SCREEN ── */
+  #bracket-screen { display: none; }
+
+  .header {
+    background: linear-gradient(180deg, #0D1F14 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--line);
+    padding: 16px 40px;
+    text-align: center;
+    position: relative;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(201,168,76,0.3);
+  }
+  .header-sub {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 6px;
+  }
+  .header-sub span {
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .player-badge {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 0.1em;
+  }
+  .trophy { font-size: 1.6rem; vertical-align: middle; margin: 0 8px; }
+
+  /* SUBMIT BAR */
+  #submit-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #0D1810;
+    border-bottom: 1px solid var(--line);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  #submit-bar .progress-text {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  #submit-bar .progress-text strong { color: var(--gold); }
+  .btn-submit {
+    padding: 9px 28px;
+    background: var(--gold);
+    border: none;
+    border-radius: 3px;
+    color: #0A0F0D;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+  }
+  .btn-submit:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-submit:not(:disabled):hover { background: var(--gold-light); }
+  .btn-submit.loading { opacity: 0.6; cursor: wait; }
+
+  .instruction {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 0 6px;
+  }
+  .scroll-hint {
+    display: none;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 8px 8px;
+  }
+  @media (max-width: 1440px) { .scroll-hint { display: block; } }
+
+  /* BRACKET */
+  .bracket-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 24px 20px 60px;
+    min-width: 1400px;
+  }
+
+  .round-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-align: center;
+    white-space: nowrap;
+    padding: 4px 12px;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px;
+  }
+
+  .match {
+    display: flex;
+    flex-direction: column;
+    width: 160px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--panel);
+    transition: border-color 0.2s;
+  }
+  .match:hover { border-color: rgba(201,168,76,0.3); }
+
+  .team {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text);
+    min-height: 36px;
+    user-select: none;
+    position: relative;
+  }
+  .team:first-child { border-bottom: 1px solid var(--line); }
+  .team:hover { background: var(--hover); }
+  .team.winner { background: var(--winner-bg); color: var(--gold-light); font-weight: 700; }
+  .team.winner::after { content: '✓'; position: absolute; right: 8px; font-size: 0.6rem; color: var(--gold); }
+  .team.loser { opacity: 0.35; }
+  .flag { font-size: 1rem; line-height: 1; flex-shrink: 0; }
+  .team-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .final-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-align: center;
+  }
+
+  .center-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 0 30px;
+    min-width: 200px;
+  }
+
+  .match.final-match {
+    width: 180px;
+    border-color: rgba(201,168,76,0.4);
+    box-shadow: 0 0 20px rgba(201,168,76,0.08);
+  }
+  .match.final-match .team { min-height: 44px; font-size: 0.8rem; }
+
+  .champion-box {
+    text-align: center;
+    padding: 14px 20px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 4px;
+    background: rgba(201,168,76,0.05);
+    min-width: 160px;
+  }
+  .champ-label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .champ-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--gold-light); letter-spacing: 0.1em; }
+  .champ-flag { font-size: 1.6rem; display: block; margin-bottom: 4px; }
+
+  .reset-btn {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: rgba(201,168,76,0.4); color: var(--gold); }
+
+  .pitch-deco {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--pitch), var(--gold), var(--pitch), transparent);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* ── SUCCESS SCREEN ── */
+  #success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 30%, #0D2A18 0%, var(--bg) 70%);
+  }
+  #success-screen .big-trophy { font-size: 5rem; margin-bottom: 24px; display: block; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+  #success-screen h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  #success-screen p { color: var(--muted); font-size: 0.85rem; line-height: 1.7; max-width: 340px; }
+  #success-screen .summary-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px 32px;
+    margin: 28px 0;
+    max-width: 340px;
+    width: 100%;
+    text-align: left;
+  }
+  .summary-card .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 0.78rem; }
+  .summary-card .sum-row:last-child { border-bottom: none; }
+  .sum-label { color: var(--muted); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; }
+  .sum-val { font-weight: 600; color: var(--text); }
+  .sum-val.gold { color: var(--gold-light); }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: #1A3D24;
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    transition: transform 0.3s ease;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast.error { background: #3d1a1a; border-color: #e05a5a; color: #e05a5a; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     STEP 1 — NAME ENTRY SCREEN
+═══════════════════════════════════════════ -->
+<div id="name-screen">
+  <span class="trophy-big">🏆</span>
+  <h1>World Cup<br>Predictor</h1>
+  <p>Pick your winners — road to the final</p>
+
+  <div class="name-card">
+    <label for="player-name">Your Name</label>
+    <input type="text" id="player-name" placeholder="e.g. Ahmed" maxlength="40" autocomplete="off" />
+    <div class="name-error" id="name-error">Please enter your name to continue.</div>
+    <button class="btn-start" onclick="startBracket()">Enter the Tournament →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     STEP 2 — BRACKET SCREEN
+═══════════════════════════════════════════ -->
+<div id="bracket-screen">
+  <div class="header">
+    <h1><span class="trophy">🏆</span> World Cup Predictor <span class="trophy">🏆</span></h1>
+    <div class="header-sub">
+      <span>Predicting as</span>
+      <span class="player-badge" id="player-display">—</span>
+    </div>
+  </div>
+
+  <div id="submit-bar">
+    <span class="progress-text" id="progress-text">Pick all winners to submit</span>
+    <button class="btn-submit" id="submit-btn" disabled onclick="submitPrediction()">
+      Submit My Prediction
+    </button>
+  </div>
+
+  <div class="instruction">Click a team name to advance them through the bracket</div>
+  <div class="scroll-hint">← Scroll horizontally to see the full bracket →</div>
+
+  <div class="bracket-wrapper" id="bracket"></div>
+  <div class="pitch-deco"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     STEP 3 — SUCCESS SCREEN
+═══════════════════════════════════════════ -->
+<div id="success-screen">
+  <span class="big-trophy">🏆</span>
+  <h2>Prediction Submitted!</h2>
+  <p>Your picks are locked in. Good luck — may your champion reign supreme.</p>
+
+  <div class="summary-card" id="summary-card"></div>
+
+  <p style="color:var(--muted);font-size:0.72rem;margin-top:8px;">
+    Want to change your picks? Refresh the page to start over.
+  </p>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  ⬇️  PASTE YOUR GOOGLE APPS SCRIPT URL HERE (Step 3 below)
+// ════════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2AuwK26qYq1XM1aJ1g89YHiiylcpn0LKH5UQgwdC1pYlxWrE86TKYIsAeUIAea3IsUw/exec";
+// ════════════════════════════════════════════════════════
+
+const teamsData = {
+  left: [
+    [{ name:"Germany",      flag:"🇩🇪" }, { name:"Paraguay",       flag:"🇵🇾" }],
+    [{ name:"France",       flag:"🇫🇷" }, { name:"Sweden",         flag:"🇸🇪" }],
+    [{ name:"South Africa", flag:"🇿🇦" }, { name:"Canada",         flag:"🇨🇦" }],
+    [{ name:"Netherlands",  flag:"🇳🇱" }, { name:"Morocco",        flag:"🇲🇦" }],
+    [{ name:"Portugal",     flag:"🇵🇹" }, { name:"Croatia",        flag:"🇭🇷" }],
+    [{ name:"Spain",        flag:"🇪🇸" }, { name:"Austria",        flag:"🇦🇹" }],
+    [{ name:"USA",          flag:"🇺🇸" }, { name:"Bosnia-Herz.",   flag:"🇧🇦" }],
+    [{ name:"Belgium",      flag:"🇧🇪" }, { name:"Senegal",        flag:"🇸🇳" }],
+  ],
+  right: [
+    [{ name:"Brazil",       flag:"🇧🇷" }, { name:"Japan",          flag:"🇯🇵" }],
+    [{ name:"Ivory Coast",  flag:"🇨🇮" }, { name:"Norway",         flag:"🇳🇴" }],
+    [{ name:"Mexico",       flag:"🇲🇽" }, { name:"Ecuador",        flag:"🇪🇨" }],
+    [{ name:"England",      flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿" }, { name:"DR Congo",       flag:"🇨🇩" }],
+    [{ name:"Argentina",    flag:"🇦🇷" }, { name:"Cape Verde",     flag:"🇨🇻" }],
+    [{ name:"Australia",    flag:"🇦🇺" }, { name:"Egypt",          flag:"🇪🇬" }],
+    [{ name:"Switzerland",  flag:"🇨🇭" }, { name:"Algeria",        flag:"🇩🇿" }],
+    [{ name:"Colombia",     flag:"🇨🇴" }, { name:"Ghana",          flag:"🇬🇭" }],
+  ]
+};
+
+const ROUNDS = ['R32','R16','QF','SF'];
+const ROUND_LABELS = { R32:'Round of 32', R16:'Round of 16', QF:'Quarter-Final', SF:'Semi-Final' };
+const TOTAL_PICKS = 15; // 8+4+2+1 per side = 15, plus champion = 16 total decisions
+
+let playerName = '';
+let state = { left:{}, right:{} };
+let stateChampion = null;
+
+// ── NAME SCREEN ──────────────────────────────
+function startBracket() {
+  const input = document.getElementById('player-name');
+  const err   = document.getElementById('name-error');
+  const name  = input.value.trim();
+  if (!name) { err.style.display = 'block'; input.focus(); return; }
+  err.style.display = 'none';
+  playerName = name;
+  document.getElementById('player-display').textContent = playerName;
+  document.getElementById('name-screen').style.display = 'none';
+  document.getElementById('bracket-screen').style.display = 'block';
+  initState();
+  render();
+}
+document.getElementById('player-name').addEventListener('keydown', e => {
+  if (e.key === 'Enter') startBracket();
+});
+
+// ── STATE ────────────────────────────────────
+function initState() {
+  state = { left:{}, right:{} };
+  ['left','right'].forEach(side => {
+    ROUNDS.forEach((r,ri) => {
+      state[side][ri] = {};
+      const n = 8 / Math.pow(2,ri);
+      for (let i=0;i<n;i++) state[side][ri][i] = null;
+    });
+  });
+  stateChampion = null;
+}
+
+function getTeamAt(side,roundIdx,matchIdx,slot) {
+  if (roundIdx===0) return teamsData[side][matchIdx][slot];
+  const w0 = state[side][roundIdx-1][matchIdx*2];
+  const w1 = state[side][roundIdx-1][matchIdx*2+1];
+  return slot===0 ? w0 : w1;
+}
+
+function pickWinner(side,roundIdx,matchIdx,slot) {
+  const team = getTeamAt(side,roundIdx,matchIdx,slot);
+  if (!team) return;
+  const cur = state[side][roundIdx][matchIdx];
+  state[side][roundIdx][matchIdx] = (cur && cur.name===team.name) ? null : team;
+  for (let r=roundIdx+1;r<ROUNDS.length;r++) {
+    const m = Math.floor(matchIdx/Math.pow(2,r-roundIdx));
+    state[side][r][m] = null;
+  }
+  stateChampion = null;
+  render();
+  updateProgress();
+}
+
+function pickFinalTeam(slot) {
+  const team = slot===0 ? state['left'][3][0] : state['right'][3][0];
+  if (!team) return;
+  stateChampion = (stateChampion && stateChampion.name===team.name) ? null : team;
+  render();
+  updateProgress();
+}
+
+// ── PROGRESS BAR ─────────────────────────────
+function countPicks() {
+  let count = 0;
+  ['left','right'].forEach(side=>{
+    ROUNDS.forEach((_,ri)=>{
+      const n=8/Math.pow(2,ri);
+      for(let i=0;i<n;i++) if(state[side][ri][i]) count++;
+    });
+  });
+  if(stateChampion) count++;
+  return count; // max = 15 picks + 1 champion = 16
+}
+
+function updateProgress() {
+  const total = 16; // 8 R32 each side=16, /2+...+1 = 15 per bracket + champion
+  // Actually: 8+4+2+1 = 15 left/right combined + 1 champion = 16
+  const picks = countPicks();
+  const pct   = Math.round((picks/total)*100);
+  const submitBtn = document.getElementById('submit-btn');
+  const progText  = document.getElementById('progress-text');
+  progText.innerHTML = `<strong>${picks}/16</strong> picks made`;
+  submitBtn.disabled = picks < 16;
+}
+
+// ── RENDER ───────────────────────────────────
+function render() {
+  const bracket = document.getElementById('bracket');
+  bracket.innerHTML = '';
+
+  // LEFT SIDE
+  const leftSide = buildSideEl('left');
+  bracket.appendChild(leftSide);
+
+  // CENTER
+  const center = document.createElement('div');
+  center.className = 'center-col';
+  center.appendChild(Object.assign(document.createElement('div'),{className:'final-label',textContent:'⚽ THE FINAL ⚽'}));
+  center.appendChild(buildFinalMatchEl());
+
+  const champBox = document.createElement('div');
+  champBox.className = 'champion-box';
+  champBox.innerHTML = stateChampion
+    ? `<div class="champ-label">🏆 World Champion</div><span class="champ-flag">${stateChampion.flag}</span><div class="champ-name">${stateChampion.name}</div>`
+    : `<div class="champ-label">World Champion</div><div class="champ-name" style="color:var(--muted);font-size:1rem">—</div>`;
+  center.appendChild(champBox);
+
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'reset-btn';
+  resetBtn.textContent = '↺ Reset Bracket';
+  resetBtn.onclick = () => { initState(); render(); updateProgress(); };
+  center.appendChild(resetBtn);
+
+  bracket.appendChild(center);
+
+  // RIGHT SIDE
+  const rightSide = buildSideEl('right');
+  bracket.appendChild(rightSide);
+
+  updateProgress();
+}
+
+function buildSideEl(side) {
+  const sideEl = document.createElement('div');
+  sideEl.style.cssText = `display:flex;flex-direction:${side==='right'?'row-reverse':'row'};align-items:stretch;`;
+
+  ROUNDS.forEach((round,roundIdx)=>{
+    const matchCount = 8/Math.pow(2,roundIdx);
+    const gap = roundIdx===0 ? 8 : 0;
+
+    const col = document.createElement('div');
+    col.style.cssText = 'display:flex;flex-direction:column;align-items:center;';
+
+    const lbl = document.createElement('div');
+    lbl.className = 'round-label';
+    lbl.textContent = ROUND_LABELS[round];
+    col.appendChild(lbl);
+
+    const wrap = document.createElement('div');
+    wrap.style.cssText = `display:flex;flex-direction:column;flex:1;justify-content:space-around;gap:${gap}px;`;
+    for(let mi=0;mi<matchCount;mi++) wrap.appendChild(buildMatchEl(side,roundIdx,mi));
+    col.appendChild(wrap);
+    sideEl.appendChild(col);
+
+    if(roundIdx<ROUNDS.length-1){
+      const connWrap = document.createElement('div');
+      connWrap.style.cssText = 'display:flex;flex-direction:column;justify-content:space-around;padding-top:36px;';
+      for(let ci=0;ci<matchCount/2;ci++) connWrap.appendChild(buildConnUnit(side));
+      sideEl.appendChild(connWrap);
+    }
+  });
+  return sideEl;
+}
+
+function buildMatchEl(side,roundIdx,matchIdx){
+  const div = document.createElement('div');
+  div.className = 'match';
+  for(let slot=0;slot<2;slot++){
+    const team   = getTeamAt(side,roundIdx,matchIdx,slot);
+    const winner = state[side][roundIdx][matchIdx];
+    const td = document.createElement('div');
+    td.className = 'team';
+    if(team){
+      if(winner){ td.classList.add(winner.name===team.name?'winner':'loser'); }
+      td.innerHTML = `<span class="flag">${team.flag}</span><span class="team-name">${team.name}</span>`;
+      td.addEventListener('click',()=>pickWinner(side,roundIdx,matchIdx,slot));
+    } else {
+      td.innerHTML = `<span class="flag" style="opacity:.3">⬡</span><span class="team-name" style="color:var(--muted);font-style:italic;font-size:0.65rem">TBD</span>`;
+    }
+    div.appendChild(td);
+  }
+  return div;
+}
+
+function buildFinalMatchEl(){
+  const div = document.createElement('div');
+  div.className = 'match final-match';
+  [state['left'][3][0], state['right'][3][0]].forEach((team,slot)=>{
+    const td = document.createElement('div');
+    td.className = 'team';
+    if(team){
+      if(stateChampion) td.classList.add(stateChampion.name===team.name?'winner':'loser');
+      td.innerHTML = `<span class="flag">${team.flag}</span><span class="team-name">${team.name}</span>`;
+      td.addEventListener('click',()=>pickFinalTeam(slot));
+    } else {
+      td.innerHTML = `<span class="flag" style="opacity:.3">⬡</span><span class="team-name" style="color:var(--muted);font-style:italic;font-size:0.65rem">TBD</span>`;
+    }
+    div.appendChild(td);
+  });
+  return div;
+}
+
+function buildConnUnit(side){
+  const wrap=document.createElement('div');
+  wrap.style.cssText='display:flex;flex-direction:column;flex:1;justify-content:center;min-height:80px;';
+  const bdr=side==='left'?'border-right':'border-left';
+  const color='1px solid #1F2E24';
+  const top=document.createElement('div');
+  top.style.cssText=`flex:1;width:16px;${bdr}:${color};border-top:${color};border-radius:${side==='left'?'0 3px 0 0':'3px 0 0 0'};`;
+  const mid=document.createElement('div');
+  mid.style.cssText='width:16px;height:1px;background:#1F2E24;';
+  const bot=document.createElement('div');
+  bot.style.cssText=`flex:1;width:16px;${bdr}:${color};border-bottom:${color};border-radius:${side==='left'?'0 0 3px 0':'0 0 0 3px'};`;
+  wrap.append(top,mid,bot);
+  return wrap;
+}
+
+// ── COLLECT ALL PICKS FOR SHEET ──────────────
+function collectPicks() {
+  const picks = {};
+  ['left','right'].forEach(side=>{
+    ROUNDS.forEach((r,ri)=>{
+      const n=8/Math.pow(2,ri);
+      for(let i=0;i<n;i++){
+        const w=state[side][ri][i];
+        const key=`${side}_${r}_match${i+1}`;
+        picks[key] = w ? w.name : '';
+      }
+    });
+  });
+  picks['champion'] = stateChampion ? stateChampion.name : '';
+  return picks;
+}
+
+// ── SUBMIT ───────────────────────────────────
+async function submitPrediction() {
+  if(APPS_SCRIPT_URL === "PASTE_YOUR_APPS_SCRIPT_URL_HERE"){
+    showToast("⚠️ Apps Script URL not set yet — see setup instructions", true);
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.textContent = 'Submitting…';
+
+  const payload = {
+    name: playerName,
+    timestamp: new Date().toISOString(),
+    picks: collectPicks(),
+    champion: stateChampion ? stateChampion.name : ''
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode:   'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    showSuccessScreen(payload);
+  } catch(err) {
+    showToast('Connection error — check your internet and try again.', true);
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.textContent = 'Submit My Prediction';
+  }
+}
+
+function showSuccessScreen(payload) {
+  document.getElementById('bracket-screen').style.display = 'none';
+  const s = document.getElementById('success-screen');
+  s.style.display = 'flex';
+
+  // Build summary
+  const leftFinal  = state['left'][3][0];
+  const rightFinal = state['right'][3][0];
+  const leftSF1    = state['left'][2][0];
+  const leftSF2    = state['left'][2][1];
+  const rightSF1   = state['right'][2][0];
+  const rightSF2   = state['right'][2][1];
+
+  document.getElementById('summary-card').innerHTML = `
+    <div class="sum-row"><span class="sum-label">Player</span><span class="sum-val gold">${playerName}</span></div>
+    <div class="sum-row"><span class="sum-label">Left Finalist</span><span class="sum-val">${leftFinal ? leftFinal.flag+' '+leftFinal.name : '—'}</span></div>
+    <div class="sum-row"><span class="sum-label">Right Finalist</span><span class="sum-val">${rightFinal ? rightFinal.flag+' '+rightFinal.name : '—'}</span></div>
+    <div class="sum-row"><span class="sum-label">🏆 Champion</span><span class="sum-val gold">${stateChampion ? stateChampion.flag+' '+stateChampion.name : '—'}</span></div>
+  `;
+}
+
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = isError ? 'error show' : 'show';
+  setTimeout(()=>{ t.className = isError ? 'error' : ''; }, 4000);
+}
+
+// Init
+initState();
+</script>
+</body>
+</html>
