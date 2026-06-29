@@ -618,7 +618,7 @@
 // ════════════════════════════════════════════════
 // PASTE YOUR GOOGLE APPS SCRIPT URL HERE
 // ════════════════════════════════════════════════
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2AuwK26qYq1XM1aJ1g89YHiiylcpn0LKH5UQgwdC1pYlxWrE86TKYIsAeUIAea3IsUw/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz58WWSmCUM7HIEsLZUHgRQb4YavLuauBEx_lAqKNnLfB9xUPYUIKq5as-KPr8WO7xTwA/exec";
 // ════════════════════════════════════════════════
 
 const teamsData = {
@@ -1055,7 +1055,7 @@ function collectPicks() {
       }
     });
   });
-  picks['Champion'] = stateChampion ? stateChampion.name : '';
+  // Note: champion is sent separately as data.champion — do NOT include it here
   return picks;
 }
 
