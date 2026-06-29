@@ -656,9 +656,11 @@
     </div>
 
     <div class="results-footer">
-      <span>World Cup 2026 Bracket Predictor</span>
+      <span>World Cup 2030 Bracket Predictor</span>
       <div class="dot"></div>
       <span id="results-footer-name">—</span>
+      <div class="dot"></div>
+      <span id="results-footer-date">—</span>
       <div class="dot"></div>
       <span>Screenshot &amp; share</span>
     </div>
@@ -1057,6 +1059,7 @@ function showResultsScreen() {
   // Fill header
   document.getElementById('results-player-name-display').textContent = playerName;
   document.getElementById('results-footer-name').textContent = playerName;
+  document.getElementById('results-footer-date').textContent = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
   if (stateChampion) {
     document.getElementById('results-champ-flag').textContent = stateChampion.flag;
     document.getElementById('results-champ-name').textContent = stateChampion.name;
