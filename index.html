@@ -324,6 +324,15 @@
   }
   .reset-btn:hover { border-color: rgba(201,168,76,0.4); color: var(--gold); }
 
+  /* ── LOCKED ROUND STYLES ── */
+  .match-locked { opacity: 0.45; border-color: var(--line) !important; box-shadow: none !important; }
+  .match-locked:hover { border-color: var(--line) !important; }
+  .team-locked { cursor: not-allowed !important; }
+  .team-locked:hover { background: transparent !important; }
+  /* Lock icon on the round label when locked */
+  .round-label.locked::before { content: '🔒 '; font-size: 0.65rem; }
+  .mobile-round-header.locked::before { content: '🔒 '; font-size: 0.75rem; }
+
   /* ══════════════════════════════════════
      MOBILE BRACKET (< 900px)
   ══════════════════════════════════════ */
@@ -455,6 +464,8 @@
   @media (max-width: 899px) {
     #desktop-bracket { display: none !important; }
     #mobile-bracket { display: block !important; }
+    /* Hide sticky bar on mobile — submit button lives inline below champion */
+    #submit-bar { display: none !important; }
   }
   @media (min-width: 900px) {
     #desktop-bracket { display: block; }
@@ -551,9 +562,9 @@
   <h1>World Cup<br>Predictor</h1>
   <p>Pick your winners — road to the final</p>
   <div class="name-card">
-    <label for="player-name">Your Name</label>
+    <label for="player-name">Your Full Name</label>
     <input type="text" id="player-name" placeholder="e.g. Ahmed" maxlength="40" autocomplete="off" />
-    <div class="name-error" id="name-error">Please enter your name to continue.</div>
+    <div class="name-error" id="name-error">Please enter your full name to continue.</div>
     <button class="btn-start" onclick="startBracket()">Enter the Tournament →</button>
   </div>
 </div>
@@ -607,7 +618,7 @@
 // ════════════════════════════════════════════════
 // PASTE YOUR GOOGLE APPS SCRIPT URL HERE
 // ════════════════════════════════════════════════
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz58WWSmCUM7HIEsLZUHgRQb4YavLuauBEx_lAqKNnLfB9xUPYUIKq5as-KPr8WO7xTwA/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2AuwK26qYq1XM1aJ1g89YHiiylcpn0LKH5UQgwdC1pYlxWrE86TKYIsAeUIAea3IsUw/exec";
 // ════════════════════════════════════════════════
 
 const teamsData = {
@@ -682,7 +693,23 @@ function getTeamAt(side, roundIdx, matchIdx, slot) {
   return slot === 0 ? w0 : w1;
 }
 
+// Returns true if all matches in the previous round on this side are filled
+function isRoundUnlocked(side, roundIdx) {
+  if (roundIdx === 0) return true; // R32 always open
+  const prevCount = MATCH_COUNTS[roundIdx - 1];
+  for (let i = 0; i < prevCount; i++) {
+    if (!state[side][roundIdx - 1][i]) return false;
+  }
+  return true;
+}
+
+// Final is unlocked only when both sides have their SF winner
+function isFinalUnlocked() {
+  return !!(state['left'][3][0] && state['right'][3][0]);
+}
+
 function pickWinner(side, roundIdx, matchIdx, slot) {
+  if (!isRoundUnlocked(side, roundIdx)) return; // round locked
   const team = getTeamAt(side, roundIdx, matchIdx, slot);
   if (!team) return;
   const cur = state[side][roundIdx][matchIdx];
@@ -698,6 +725,7 @@ function pickWinner(side, roundIdx, matchIdx, slot) {
 }
 
 function pickFinalTeam(slot) {
+  if (!isFinalUnlocked()) return;
   const team = slot === 0 ? state['left'][3][0] : state['right'][3][0];
   if (!team) return;
   stateChampion = (stateChampion && stateChampion.name === team.name) ? null : team;
@@ -773,7 +801,7 @@ function renderDesktop() {
 
   const center = document.createElement('div');
   center.className = 'center-col';
-  center.appendChild(Object.assign(document.createElement('div'), { className:'final-label', textContent:'🏆 THE FINAL' }));
+  center.appendChild(Object.assign(document.createElement('div'), { className:'final-label', textContent:'THE FINAL 🏆' }));
   center.appendChild(buildFinalMatchEl());
 
   const champBox = document.createElement('div');
@@ -804,7 +832,8 @@ function buildSideEl(side) {
     col.style.cssText = 'display:flex;flex-direction:column;align-items:center;';
 
     const lbl = document.createElement('div');
-    lbl.className = 'round-label';
+    const roundLocked = roundIdx > 0 && !isRoundUnlocked(side, roundIdx);
+    lbl.className = 'round-label' + (roundLocked ? ' locked' : '');
     lbl.textContent = ROUND_LABELS[round];
     col.appendChild(lbl);
 
@@ -826,16 +855,17 @@ function buildSideEl(side) {
 
 function buildMatchEl(side, roundIdx, matchIdx) {
   const div = document.createElement('div');
-  div.className = 'match';
+  const locked = !isRoundUnlocked(side, roundIdx);
+  div.className = 'match' + (locked ? ' match-locked' : '');
   for (let slot = 0; slot < 2; slot++) {
     const team   = getTeamAt(side, roundIdx, matchIdx, slot);
     const winner = state[side][roundIdx][matchIdx];
     const td = document.createElement('div');
-    td.className = 'team';
+    td.className = 'team' + (locked ? ' team-locked' : '');
     if (team) {
-      if (winner) td.classList.add(winner.name === team.name ? 'winner' : 'loser');
+      if (!locked && winner) td.classList.add(winner.name === team.name ? 'winner' : 'loser');
       td.innerHTML = `<span class="flag">${team.flag}</span><span class="team-name">${team.name}</span>`;
-      td.addEventListener('click', () => pickWinner(side, roundIdx, matchIdx, slot));
+      if (!locked) td.addEventListener('click', () => pickWinner(side, roundIdx, matchIdx, slot));
     } else {
       td.innerHTML = `<span class="flag" style="opacity:.3">⬡</span><span class="team-name" style="color:var(--muted);font-style:italic;font-size:0.62rem">TBD</span>`;
     }
@@ -846,14 +876,15 @@ function buildMatchEl(side, roundIdx, matchIdx) {
 
 function buildFinalMatchEl() {
   const div = document.createElement('div');
-  div.className = 'match final-match';
+  const locked = !isFinalUnlocked();
+  div.className = 'match final-match' + (locked ? ' match-locked' : '');
   [state['left'][3][0], state['right'][3][0]].forEach((team, slot) => {
     const td = document.createElement('div');
-    td.className = 'team';
+    td.className = 'team' + (locked ? ' team-locked' : '');
     if (team) {
-      if (stateChampion) td.classList.add(stateChampion.name === team.name ? 'winner' : 'loser');
+      if (!locked && stateChampion) td.classList.add(stateChampion.name === team.name ? 'winner' : 'loser');
       td.innerHTML = `<span class="flag">${team.flag}</span><span class="team-name">${team.name}</span>`;
-      td.addEventListener('click', () => pickFinalTeam(slot));
+      if (!locked) td.addEventListener('click', () => pickFinalTeam(slot));
     } else {
       td.innerHTML = `<span class="flag" style="opacity:.3">⬡</span><span class="team-name" style="color:var(--muted);font-style:italic;font-size:0.62rem">TBD</span>`;
     }
@@ -903,7 +934,8 @@ function renderMobile() {
       roundDiv.className = 'mobile-round';
 
       const hdr = document.createElement('div');
-      hdr.className = 'mobile-round-header';
+      const mRoundLocked = roundIdx > 0 && !isRoundUnlocked(side, roundIdx);
+      hdr.className = 'mobile-round-header' + (mRoundLocked ? ' locked' : '');
       hdr.textContent = ROUND_LABELS[round];
       roundDiv.appendChild(hdr);
 
@@ -958,6 +990,16 @@ function renderMobile() {
     : `<div class="champ-label">World Champion</div><div class="champ-name" style="color:var(--muted);font-size:0.9rem">—</div>`;
   finalSection.appendChild(champBox);
 
+  // Mobile submit button — only visible after champion is picked
+  if (stateChampion) {
+    const mobileSubmitBtn = document.createElement('button');
+    mobileSubmitBtn.className = 'btn-submit';
+    mobileSubmitBtn.style.cssText = 'width:100%;max-width:260px;padding:14px;font-size:1.1rem;margin-top:4px;';
+    mobileSubmitBtn.textContent = 'Submit My Prediction';
+    mobileSubmitBtn.onclick = submitPrediction;
+    finalSection.appendChild(mobileSubmitBtn);
+  }
+
   const resetBtn = document.createElement('button');
   resetBtn.className = 'mobile-reset-btn';
   resetBtn.textContent = '↺ Reset Bracket';
@@ -969,16 +1011,17 @@ function renderMobile() {
 
 function buildMobileMatchEl(side, roundIdx, matchIdx) {
   const div = document.createElement('div');
-  div.className = 'mobile-match';
+  const locked = !isRoundUnlocked(side, roundIdx);
+  div.className = 'mobile-match' + (locked ? ' match-locked' : '');
   for (let slot = 0; slot < 2; slot++) {
     const team   = getTeamAt(side, roundIdx, matchIdx, slot);
     const winner = state[side][roundIdx][matchIdx];
     const td = document.createElement('div');
-    td.className = 'mobile-team';
+    td.className = 'mobile-team' + (locked ? ' team-locked' : '');
     if (team) {
-      if (winner) td.classList.add(winner.name === team.name ? 'winner' : 'loser');
+      if (!locked && winner) td.classList.add(winner.name === team.name ? 'winner' : 'loser');
       td.innerHTML = `<span class="flag">${team.flag}</span><span class="team-name">${team.name}</span>`;
-      td.addEventListener('click', () => pickWinner(side, roundIdx, matchIdx, slot));
+      if (!locked) td.addEventListener('click', () => pickWinner(side, roundIdx, matchIdx, slot));
     } else {
       td.innerHTML = `<span class="flag" style="opacity:.3">⬡</span><span style="color:var(--muted);font-style:italic;font-size:0.62rem">TBD</span>`;
     }
