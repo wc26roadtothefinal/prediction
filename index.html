@@ -1153,31 +1153,17 @@ async function savePng() {
   btn.disabled = true;
   btn.textContent = 'Generating…';
   try {
-    // Temporarily un-scale the poster so html2canvas captures full resolution
-    const poster = document.getElementById('results-poster-inner');
-    const outer  = document.getElementById('results-poster-outer');
-    const prevTransform = poster.style.transform;
-    const prevOuterH    = outer.style.height;
-    poster.style.transform = 'scale(1)';
-    outer.style.height     = poster.scrollHeight + 'px';
-    outer.style.overflow   = 'visible';
-
-    await new Promise(r => setTimeout(r, 80)); // let reflow settle
-
     const card = document.getElementById('results-card');
     const canvas = await html2canvas(card, {
       backgroundColor: '#0A0F0D',
-      scale: 2,          // 2× for crisp retina output
+      scale: window.devicePixelRatio || 2,
       useCORS: true,
       logging: false,
+      width: card.offsetWidth,
+      height: card.offsetHeight,
+      windowWidth: card.offsetWidth,
     });
 
-    // Restore scale
-    poster.style.transform = prevTransform;
-    outer.style.height     = prevOuterH;
-    outer.style.overflow   = 'hidden';
-
-    // Download
     const link = document.createElement('a');
     link.download = `worldcup-bracket-${playerName.replace(/\s+/g,'-')}.png`;
     link.href = canvas.toDataURL('image/png');
