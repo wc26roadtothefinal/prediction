@@ -551,9 +551,9 @@
   <h1>World Cup<br>Predictor</h1>
   <p>Pick your winners — road to the final</p>
   <div class="name-card">
-    <label for="player-name">Your Full Name</label>
+    <label for="player-name">Your Name</label>
     <input type="text" id="player-name" placeholder="e.g. Ahmed" maxlength="40" autocomplete="off" />
-    <div class="name-error" id="name-error">Please enter your full name to continue.</div>
+    <div class="name-error" id="name-error">Please enter your name to continue.</div>
     <button class="btn-start" onclick="startBracket()">Enter the Tournament →</button>
   </div>
 </div>
@@ -607,7 +607,7 @@
 // ════════════════════════════════════════════════
 // PASTE YOUR GOOGLE APPS SCRIPT URL HERE
 // ════════════════════════════════════════════════
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2AuwK26qYq1XM1aJ1g89YHiiylcpn0LKH5UQgwdC1pYlxWrE86TKYIsAeUIAea3IsUw/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz58WWSmCUM7HIEsLZUHgRQb4YavLuauBEx_lAqKNnLfB9xUPYUIKq5as-KPr8WO7xTwA/exec";
 // ════════════════════════════════════════════════
 
 const teamsData = {
@@ -773,7 +773,7 @@ function renderDesktop() {
 
   const center = document.createElement('div');
   center.className = 'center-col';
-  center.appendChild(Object.assign(document.createElement('div'), { className:'final-label', textContent:'THE FINAL 🏆' }));
+  center.appendChild(Object.assign(document.createElement('div'), { className:'final-label', textContent:'🏆 THE FINAL' }));
   center.appendChild(buildFinalMatchEl());
 
   const champBox = document.createElement('div');
@@ -1023,11 +1023,18 @@ async function submitPrediction() {
   btn.classList.add('loading');
   btn.textContent = 'Submitting…';
 
+  const leftFinalist  = state['left'][3][0];
+  const rightFinalist = state['right'][3][0];
+  const finalMatchup  = (leftFinalist && rightFinalist)
+    ? `${leftFinalist.name} vs ${rightFinalist.name}`
+    : '';
+
   const payload = {
     name: playerName,
     timestamp: new Date().toISOString(),
     picks: collectPicks(),
-    champion: stateChampion ? stateChampion.name : ''
+    champion: stateChampion ? stateChampion.name : '',
+    final: finalMatchup
   };
 
   try {
