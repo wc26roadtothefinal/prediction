@@ -26,7 +26,7 @@
     color: var(--text);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: auto; /* Safari fix: hidden clips flex children; auto lets bracket scroll */
   }
 
   /* ── NAME ENTRY SCREEN ── */
@@ -226,7 +226,7 @@
   .bracket-inner {
     display: flex;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-start;
     min-width: 1100px;
   }
 
@@ -459,6 +459,20 @@
   @media (min-width: 900px) {
     #desktop-bracket { display: block; }
     #mobile-bracket { display: none; }
+  }
+
+  /* ── SAFARI SCROLL FIX ──
+     Safari clips flex children when the scroll container uses
+     justify-content:center and content is wider than the viewport.
+     Solution: switch to flex-start and use auto padding so content
+     appears centred on wide screens but is fully scrollable on narrow ones. */
+  @media (min-width: 900px) {
+    .bracket-wrapper {
+      justify-content: flex-start !important;
+      /* Centre when viewport is wide enough, scroll when not */
+      padding-left: max(20px, calc((100vw - 1140px) / 2)) !important;
+      padding-right: max(20px, calc((100vw - 1140px) / 2)) !important;
+    }
   }
 
   .pitch-deco {
@@ -759,7 +773,7 @@ function renderDesktop() {
 
   const center = document.createElement('div');
   center.className = 'center-col';
-  center.appendChild(Object.assign(document.createElement('div'), { className:'final-label', textContent:'⚽ THE FINAL ⚽' }));
+  center.appendChild(Object.assign(document.createElement('div'), { className:'final-label', textContent:'THE FINAL 🏆' }));
   center.appendChild(buildFinalMatchEl());
 
   const champBox = document.createElement('div');
